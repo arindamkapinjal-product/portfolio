@@ -106,7 +106,7 @@
 <body>
 
 <div class="col">
-  <div class="draft">Draft portfolio. Results marked "pending" are not measured yet. Items in [brackets] are placeholders for Arindam to fill in.</div>
+  <div class="draft">Work in progress. Results marked "pending" are not measured yet. Live demo links are added at launch.</div>
 
   <nav aria-label="Main">
     <span class="me">Arindam Kapinjal</span>
@@ -119,7 +119,7 @@
   </nav>
 
   <header class="hero">
-    <span class="label">Product Manager · Foxtale · moving into AI product</span>
+    <span class="label">Product Manager at Foxtale · AI Product Manager</span>
     <h1>AI products, with the <em>evidence</em> attached.</h1>
     <p class="lede">I build working AI prototypes and judge them the way an interviewer would: what was decided, how it is tested, and what still breaks. Two projects so far, both built end to end.</p>
     <div class="facts">
@@ -294,7 +294,12 @@
   <section class="contact" id="contact">
     <span class="label">Contact</span>
     <h2>Let's talk</h2>
-    <p class="ph">[Your email] · [LinkedIn URL] · [One line about the role you are looking for]</p>
+    <p>Looking for <b>AI Product Manager</b> roles: any domain, any country, remote or on-site.</p>
+    <div class="links" style="font-size:0.95rem">
+      <span id="mail" style="color:var(--ink)">arindamkapinjal@gmail.com</span>
+      <button type="button" id="copy" style="font:inherit;font-size:0.8rem;background:none;border:1px solid var(--rule);border-radius:999px;padding:2px 10px;color:var(--ink);cursor:pointer">Copy email</button>
+      <a href="https://www.linkedin.com/in/arindam-kapinjal" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
   </section>
 
   <footer>Both projects were built with Claude Code as a coding partner. Product decisions, data and evaluation are mine.</footer>
@@ -320,6 +325,11 @@
       : `Stranger${what.length ? ", " + what.join(", ") : ", plain voice call"}: family alerted at <span>minute ${at}</span>.`;
   }
   for (const id of ["t-official", "t-video", "t-intl", "t-pay"]) $(id).addEventListener("change", render);
+  $("copy").addEventListener("click", () => {
+    navigator.clipboard.writeText($("mail").textContent).then(() => { $("copy").textContent = "Copied"; }, () => {
+      const r = document.createRange(); r.selectNodeContents($("mail")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copy").textContent = "Selected";
+    });
+  });
   render();
 </script>
 </body>
