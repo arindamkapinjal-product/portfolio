@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arindam Kapinjal Portfolio</title>
+<meta name="description" content="AI product work by Arindam Kapinjal: Ruko, a scam checker for India, and Shade Finder, an on-device lipstick try-on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Layout: one reading column; each project is a case file with a status ledger ("receipts") instead of claims. */
+  :root {
+    --paper: #F2F4F6; --surface: #FFFFFF; --ink: #152033; --muted: #556072; --rule: #D5DBE3;
+    --accent: #2B4ACB; --ruko: #B3261E; --ok: #2E6B45; --pending: #8A5300; --plan: #5A6577;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0F141C; --surface: #161D28; --ink: #E8EDF4; --muted: #9AA6B8; --rule: #2A3443;
+      --accent: #8EA2FF; --ruko: #FF8A80; --ok: #7CCB98; --pending: #F2B65A; --plan: #9AA6B8; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0F141C; --surface: #161D28; --ink: #E8EDF4; --muted: #9AA6B8; --rule: #2A3443;
+    --accent: #8EA2FF; --ruko: #FF8A80; --ok: #7CCB98; --pending: #F2B65A; --plan: #9AA6B8; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.6; padding-inline: 20px; padding-block: 0 64px; }
+  .col { max-width: 760px; margin: 0 auto; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
+  p { margin: 0; max-width: 65ch; }
+  .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  .draft { font-family: var(--mono); font-size: 0.78rem; color: var(--pending); border-bottom: 1px dashed var(--pending); padding-block: 10px; text-align: center; }
+  nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 22px; }
+  nav .me { font-family: var(--display); font-weight: 800; font-size: 1.05rem; }
+  nav ul { display: flex; gap: 18px; list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: 0.82rem; }
+  nav a { color: var(--ink); text-decoration: none; }
+  nav a:hover { color: var(--accent); }
+
+  .hero { padding-block: 48px 40px; display: grid; gap: 20px; border-bottom: 1px solid var(--rule); }
+  .hero h1 { font-size: clamp(2.4rem, 6.5vw, 4.1rem); font-weight: 800; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .lede { font-size: 1.2rem; color: var(--muted); }
+  .hero .facts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 0.85rem; }
+
+  .project { padding-block: 56px 8px; display: grid; gap: 28px; }
+  .project + .project { border-top: 1px solid var(--rule); }
+  .phead { display: grid; gap: 12px; }
+  .phead h2 { font-size: clamp(2rem, 5vw, 2.9rem); font-weight: 800; }
+  .phead .one { font-size: 1.18rem; }
+  .ruko .phead h2 { color: var(--ruko); }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--mono); font-size: 0.85rem; }
+  .links span { color: var(--muted); }
+  section.part { display: grid; gap: 12px; }
+  section.part h3 { font-size: 1.35rem; font-weight: 600; }
+  ul.tight { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; max-width: 65ch; }
+
+  .decisions { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+  .decision { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 6px 24px; padding-block: 14px; border-bottom: 1px solid var(--rule); }
+  .decision b { font-family: var(--display); font-weight: 600; font-size: 1.02rem; line-height: 1.3; }
+  .decision p { font-size: 0.98rem; }
+  @media (max-width: 620px) { .decision { grid-template-columns: 1fr; } }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chip { display: inline-block; font-family: var(--mono); font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+  .chip.ok { color: var(--ok); } .chip.pending { color: var(--pending); } .chip.plan { color: var(--plan); }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  /* The one interactive moment: Ruko's tiered alert timing */
+  .lab { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; display: grid; gap: 16px; }
+  .toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toggles label { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.8rem; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .toggles input { accent-color: var(--ruko); }
+  .track { position: relative; height: 38px; border-radius: 8px; background: var(--paper); border: 1px solid var(--rule); overflow: hidden; }
+  .track .fill { position: absolute; inset: 0 auto 0 0; background: color-mix(in srgb, var(--ruko) 22%, transparent); transition: width .35s ease; }
+  .track .pin { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--ruko); transition: left .35s ease; }
+  .ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .verdict { font-family: var(--display); font-size: 1.25rem; font-weight: 600; }
+  .verdict span { color: var(--ruko); }
+  @media (prefers-reduced-motion: reduce) { .track .fill, .track .pin { transition: none; } }
+
+  .principles { padding-block: 56px 8px; border-top: 1px solid var(--rule); display: grid; gap: 18px; }
+  .principles h2 { font-size: 2rem; font-weight: 800; }
+  .pgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px; }
+  @media (max-width: 620px) { .pgrid { grid-template-columns: 1fr; } }
+  .pgrid div { display: grid; gap: 6px; }
+  .pgrid b { font-family: var(--display); font-weight: 600; }
+  .pgrid p { font-size: 0.98rem; color: var(--muted); }
+
+  .contact { padding-block: 48px 0; border-top: 1px solid var(--rule); margin-top: 48px; display: grid; gap: 14px; }
+  .contact h2 { font-size: 2rem; font-weight: 800; }
+  .ph { font-family: var(--mono); font-size: 0.88rem; color: var(--pending); }
+  footer { margin-top: 40px; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="col">
+  <div class="draft">Draft portfolio. Results marked "pending" are not measured yet. Items in [brackets] are placeholders for Arindam to fill in.</div>
+
+  <nav aria-label="Main">
+    <span class="me">Arindam Kapinjal</span>
+    <ul>
+      <li><a href="#ruko">Ruko</a></li>
+      <li><a href="#shade">Shade Finder</a></li>
+      <li><a href="#how">How I work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <span class="label">Product Manager · Foxtale · moving into AI product</span>
+    <h1>AI products, with the <em>evidence</em> attached.</h1>
+    <p class="lede">I build working AI prototypes and judge them the way an interviewer would: what was decided, how it is tested, and what still breaks. Two projects so far, both built end to end.</p>
+    <div class="facts">
+      <span>2 working prototypes</span>
+      <span>39 automated tests passing</span>
+      <span>₹0 running cost</span>
+    </div>
+  </header>
+
+  <!-- RUKO -->
+  <article class="project ruko" id="ruko">
+    <div class="phead">
+      <span class="label">Lead project · scam safety · India</span>
+      <h2>Ruko</h2>
+      <p class="one">Ruko (Hindi for "wait") spots the signs of a phone or WhatsApp scam and stops people at the moment it matters: before they pay.</p>
+      <div class="links"><span>Live demo: [link after launch]</span><span>Code: [GitHub link after launch]</span></div>
+    </div>
+
+    <section class="part">
+      <h3>The problem</h3>
+      <p>Phone scams in India have moved from "click this link" to live pressure on calls: fake police "digital arrest", seized parcels, blocked SIM cards, a relative "in trouble". Most start as a voice call and many move to a WhatsApp video call with a uniformed "officer". Help today mostly arrives after the money is gone. Victims are often older parents who are alone on the call, and the scam depends on keeping them alone.</p>
+    </section>
+
+    <section class="part">
+      <h3>What it does</h3>
+      <ul class="tight">
+        <li><b>Check a message.</b> Paste it, say it aloud in Hindi or English, or add a screenshot. Ruko returns a risk level, the scam type, the exact lines that gave it away, and one clear next step.</li>
+        <li><b>I'm on a call.</b> Four yes/no questions answered while the caller is still on the line. No AI, so it is instant and cannot invent anything.</li>
+        <li><b>Call protection (Android, designed).</b> Watches the signs of a scam call without ever hearing it: a stranger, a police-style profile picture, a long call, a payment app opened. It shows a STOP screen at the money moment and alerts a trusted family member.</li>
+      </ul>
+    </section>
+
+    <section class="part" aria-labelledby="lab-h">
+      <h3 id="lab-h">Try the alert timing</h3>
+      <p class="note">This uses the same tiered rule as the app. Time alone is a weak signal, because customer-care calls run long too, so each warning sign brings the family alert forward.</p>
+      <div class="lab">
+        <div class="toggles" role="group" aria-label="Call signals">
+          <label><input type="checkbox" id="t-official"> Police-style picture</label>
+          <label><input type="checkbox" id="t-video"> Video call</label>
+          <label><input type="checkbox" id="t-intl"> International number</label>
+          <label><input type="checkbox" id="t-pay"> Payment app opened</label>
+        </div>
+        <div>
+          <div class="track" aria-hidden="true"><div class="fill" id="fill"></div><div class="pin" id="pin"></div></div>
+          <div class="ticks"><span>0 min</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10 min</span></div>
+        </div>
+        <div class="verdict" id="verdict" aria-live="polite">Stranger, plain voice call: family alerted at <span>minute 10</span>.</div>
+      </div>
+    </section>
+
+    <section class="part">
+      <h3>Key decisions</h3>
+      <div class="decisions">
+        <div class="decision"><b>Rules first, AI second</b><p>Red-flag rules in English, Hindi and Hinglish run on the phone instantly and still answer if the AI is down or rate-limited. The AI (Gemini) then classifies into 13 fixed Indian scam types, so answers are consistent and testable.</p></div>
+        <div class="decision"><b>No made-up evidence</b><p>The AI must quote the exact lines it relied on. Code throws away any quote that does not appear in the message.</p></div>
+        <div class="decision"><b>Never says "safe"</b><p>A missed scam costs someone's savings; a cautious answer costs a phone call to family. The best verdict is "no scam signs found, still check before paying". The AI can raise the risk but cannot clear a strong red flag.</p></div>
+        <div class="decision"><b>Never listens to calls</b><p>Phones block call audio for good reasons. Ruko uses only signals the phone can see, and removes names, numbers, UPI IDs, Aadhaar, PAN and account numbers on the phone before any text is sent.</p></div>
+        <div class="decision"><b>Bring in family, automatically</b><p>Scammers win by isolating the victim ("don't tell anyone"). The strongest feature is not detection, it is the alert that ends the isolation.</p></div>
+        <div class="decision"><b>Improve with a gate, not by itself</b><p>Users say whether Ruko was right. A person reviews that feedback, turns it into test cases, and a change ships only if no language group gets worse. Auto-learning from feedback is open to mistakes and to poisoning by scammers.</p></div>
+      </div>
+    </section>
+
+    <section class="part">
+      <h3>How I will know it works</h3>
+      <p class="note">These are the targets set before testing. Results are pending until the hand-labelled test set (about 100 scam and 100 genuine messages from public advisories, news reports and consenting family members) is complete.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Measure</th><th>Target</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Scams caught</td><td class="num">≥ 90%</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>False alarms on genuine messages</td><td class="num">≤ 5%</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>Gap between best and worst language</td><td class="num">≤ 10 pts</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>Prompt-injection messages not cleared</td><td class="num">100%</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>Older users finishing a check unaided</td><td class="num">&lt; 30 s</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>Cost per check</td><td class="num">₹0 free tier</td><td><span class="chip pending">pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="part">
+      <h3>Status</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Part</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td>Scam rules, redaction, verdict logic, call timing</td><td><span class="chip ok">built · tested</span></td></tr>
+            <tr><td>Web app: message check, call quiz, call-protection demo</td><td><span class="chip ok">built · checked on phone width</span></td></tr>
+            <tr><td>AI check with rules fallback, time and token logging</td><td><span class="chip pending">built · not yet run with a key</span></td></tr>
+            <tr><td>Feedback store and review script</td><td><span class="chip pending">built · not yet live</span></td></tr>
+            <tr><td>Evaluation tool with regression gate</td><td><span class="chip pending">built · waiting for test set</span></td></tr>
+            <tr><td>Android call protection</td><td><span class="chip plan">designed</span></td></tr>
+            <tr><td>WhatsApp "forward to Ruko"</td><td><span class="chip plan">planned</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="part">
+      <h3>What still breaks</h3>
+      <ul class="tight">
+        <li>New scam scripts that use none of the known phrases.</li>
+        <li>Messages that are only an image or a voice note.</li>
+        <li>iPhone does not allow call protection at all; those users get the web check only.</li>
+        <li>Prevention depends on setup before the scam happens. Adoption, not detection, is the hardest problem.</li>
+      </ul>
+    </section>
+  </article>
+
+  <!-- SHADE FINDER -->
+  <article class="project" id="shade">
+    <div class="phead">
+      <span class="label">Second project · beauty e-commerce</span>
+      <h2>Shade Finder</h2>
+      <p class="one">Paste a lipstick link or type a shade, and see it on your face in the live camera before you buy.</p>
+      <div class="links"><span>Live demo: [link after launch]</span><span>Code: [GitHub link after launch]</span></div>
+    </div>
+
+    <section class="part">
+      <h3>What it does</h3>
+      <ul class="tight">
+        <li><b>Live try-on on the phone.</b> Face tracking (MediaPipe) runs in the browser and paints the shade on the lips. The camera feed never leaves the device.</li>
+        <li><b>Reads a product link.</b> An AI reads the product page and returns brand, shade and an approximate colour, always labelled as approximate.</li>
+        <li><b>Tunable realism.</b> Opacity, gloss, edge smoothing, saturation and brightness controls, with presets built from beauty-industry judgment on how balms and lipsticks actually read on lips.</li>
+      </ul>
+    </section>
+
+    <section class="part">
+      <h3>Key decisions</h3>
+      <div class="decisions">
+        <div class="decision"><b>Code for colour, AI for words</b><p>Painting the shade is deterministic code, so the same shade always looks the same. The language model is used only where language helps: reading a messy product page.</p></div>
+        <div class="decision"><b>The AI may not guess</b><p>If the page lists many shades and the choice is unclear, the colour comes back empty and the user picks it. Page text is treated as untrusted data, and the reader blocks requests to private networks.</p></div>
+        <div class="decision"><b>On-device vs cloud try-on</b><p>I set up a local comparison with a commercial cloud try-on API. It uploads a face photo, uses paid credits per try, and returns a still image rather than live video. I kept the on-device version as the product; the side-by-side quality comparison is still to run.</p></div>
+      </div>
+    </section>
+
+    <section class="part">
+      <h3>What I learned</h3>
+      <p>Try-on is a feature, not a product: it would look the same whoever built it. That pushed me to look for a problem where my judgment, rigour and evidence matter more than the demo, which became Ruko.</p>
+    </section>
+
+    <section class="part">
+      <h3>Status</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Part</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td>Colour maths, presets, link reader helpers</td><td><span class="chip ok">built · 23 tests passing</span></td></tr>
+            <tr><td>Live camera try-on</td><td><span class="chip ok">built</span></td></tr>
+            <tr><td>AI link reader</td><td><span class="chip pending">built · needs API key</span></td></tr>
+            <tr><td>Cloud try-on comparison (local only)</td><td><span class="chip pending">built · not yet compared</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </article>
+
+  <!-- HOW I WORK -->
+  <section class="principles" id="how">
+    <span class="label">How I work</span>
+    <h2>Principles behind both projects</h2>
+    <div class="pgrid">
+      <div><b>Evidence before claims</b><p>Targets are written down before testing, results are reported per group, and every miss is listed.</p></div>
+      <div><b>The right tool for each part</b><p>Deterministic code where answers must be consistent and cheap; AI where language and messiness need it.</p></div>
+      <div><b>Private by default</b><p>Faces stay on the phone. Personal details are removed before anything is sent. Calls are never heard.</p></div>
+      <div><b>Fairness is measured</b><p>Results are split by language and group, because an average can hide who the product fails.</p></div>
+      <div><b>Honest about uncertainty</b><p>"I can't tell" and "approximate" are valid answers. Confident wrong answers are the real failure.</p></div>
+      <div><b>Cost is a design input</b><p>Both projects run at ₹0 on free tiers and log time and tokens so the paid-scale cost can be estimated.</p></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <span class="label">Contact</span>
+    <h2>Let's talk</h2>
+    <p class="ph">[Your email] · [LinkedIn URL] · [One line about the role you are looking for]</p>
+  </section>
+
+  <footer>Both projects were built with Claude Code as a coding partner. Product decisions, data and evaluation are mine.</footer>
+</div>
+
+<script>
+  // Same tiered rule as Ruko's call-risk engine (site/engine/call-risk.js)
+  const T = { official: 1, video: 5, intl: 5, voice: 10 };
+  const $ = (id) => document.getElementById(id);
+  function render() {
+    const pay = $("t-pay").checked;
+    const tiers = [T.voice];
+    if ($("t-official").checked) tiers.push(T.official);
+    if ($("t-video").checked) tiers.push(T.video);
+    if ($("t-intl").checked) tiers.push(T.intl);
+    const at = pay ? 0 : Math.min(...tiers);
+    const pct = (at / 10) * 100;
+    $("fill").style.width = `${pct}%`;
+    $("pin").style.left = `calc(${pct}% - ${pct === 0 ? 0 : 3}px)`;
+    const what = [$("t-official").checked && "police-style picture", $("t-video").checked && "video call", $("t-intl").checked && "international number"].filter(Boolean);
+    $("verdict").innerHTML = pay
+      ? `Payment app opened during a stranger's call: <span>STOP screen and family alert now</span>.`
+      : `Stranger${what.length ? ", " + what.join(", ") : ", plain voice call"}: family alerted at <span>minute ${at}</span>.`;
+  }
+  for (const id of ["t-official", "t-video", "t-intl", "t-pay"]) $(id).addEventListener("change", render);
+  render();
+</script>
+</body>
+</html>
