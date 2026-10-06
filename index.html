@@ -106,7 +106,7 @@
 <body>
 
 <div class="col">
-  <div class="draft">Work in progress. Results marked "pending" are not measured yet. AI features switch on once the API key is connected.</div>
+  <div class="draft">Work in progress. Results marked "pending" are not measured yet.</div>
 
   <nav aria-label="Main">
     <span class="me">Arindam Kapinjal</span>
@@ -124,6 +124,7 @@
     <p class="lede">I build working AI prototypes and judge them the way an interviewer would: what was decided, how it is tested, and what still breaks. Two projects so far, both built end to end.</p>
     <div class="facts">
       <span>2 working prototypes</span>
+      <span>89.7% of real scam messages caught</span>
       <span>39 automated tests passing</span>
       <span>₹0 running cost</span>
     </div>
@@ -183,21 +184,25 @@
     </section>
 
     <section class="part">
-      <h3>How I will know it works</h3>
-      <p class="note">These are the targets set before testing. Results are pending until the hand-labelled test set (about 100 scam and 100 genuine messages from public advisories, news reports and consenting family members) is complete.</p>
+      <h3>How I know it works</h3>
+      <p class="note">Test set: 123 real, published messages (97 scams, 26 genuine) from fact-checkers, newspapers, police and bank advisories, each with its source. Nothing invented. The genuine set is small, so false-alarm figures will move as it grows.</p>
       <div class="scroll">
         <table>
-          <thead><tr><th>Measure</th><th>Target</th><th>Result</th></tr></thead>
+          <thead><tr><th>Measure</th><th>Target</th><th>Rules only</th><th>Rules + AI</th></tr></thead>
           <tbody>
-            <tr><td>Scams caught</td><td class="num">≥ 90%</td><td><span class="chip pending">pending</span></td></tr>
-            <tr><td>False alarms on genuine messages</td><td class="num">≤ 5%</td><td><span class="chip pending">pending</span></td></tr>
-            <tr><td>Gap between best and worst language</td><td class="num">≤ 10 pts</td><td><span class="chip pending">pending</span></td></tr>
-            <tr><td>Prompt-injection messages not cleared</td><td class="num">100%</td><td><span class="chip pending">pending</span></td></tr>
-            <tr><td>Older users finishing a check unaided</td><td class="num">&lt; 30 s</td><td><span class="chip pending">pending</span></td></tr>
-            <tr><td>Cost per check</td><td class="num">₹0 free tier</td><td><span class="chip pending">pending</span></td></tr>
+            <tr><td>Scams caught</td><td class="num">≥ 90%</td><td class="num">35.1%</td><td class="num"><b>89.7%</b> <span class="chip pending">just short</span></td></tr>
+            <tr><td>Scams caught, Hindi (30)</td><td class="num">gap ≤ 10 pts</td><td class="num">13.3%</td><td class="num"><b>96.7%</b> <span class="chip ok">gap closed</span></td></tr>
+            <tr><td>Scams caught, Hinglish (7)</td><td class="num">gap ≤ 10 pts</td><td class="num">14.3%</td><td class="num"><b>28.6%</b> <span class="chip pending">weak, tiny sample</span></td></tr>
+            <tr><td>False alarms on genuine messages</td><td class="num">≤ 5%</td><td class="num">7.7%</td><td class="num"><b>19.2%</b> <span class="chip pending">missed</span></td></tr>
+            <tr><td>Genuine messages told to STOP</td><td class="num">0%</td><td class="num">0%</td><td class="num"><b>0%</b> <span class="chip ok">met</span></td></tr>
+            <tr><td>Median time per check</td><td class="num">&lt; 3 s</td><td class="num">instant</td><td class="num"><b>0.9 s</b> (p95 1.7 s)</td></tr>
+            <tr><td>Cost per check</td><td class="num">₹0</td><td class="num">₹0</td><td class="num"><b>₹0</b> free tier · ~500 tokens in, 86 out</td></tr>
+            <tr><td>Prompt-injection messages not cleared</td><td class="num">100%</td><td colspan="2"><span class="chip pending">pending</span></td></tr>
+            <tr><td>Older users finishing a check unaided</td><td class="num">&lt; 30 s</td><td colspan="2"><span class="chip pending">pending</span></td></tr>
           </tbody>
         </table>
       </div>
+      <p class="note"><b>The trade-off I chose.</b> Adding the AI tripled the catch rate but raised false alarms, so my own regression gate flagged it. I kept it on purpose: every false alarm was a "Careful, check first" warning on a scary-sounding real bank or tax message, never a STOP. A missed scam can cost someone's savings; a cautious warning costs a phone call. Cutting false alarms is the next iteration.</p>
     </section>
 
     <section class="part">
@@ -208,9 +213,9 @@
           <tbody>
             <tr><td>Scam rules, redaction, verdict logic, call timing</td><td><span class="chip ok">built · tested</span></td></tr>
             <tr><td>Web app: message check, call quiz, call-protection demo</td><td><span class="chip ok">built · checked on phone width</span></td></tr>
-            <tr><td>AI check with rules fallback, time and token logging</td><td><span class="chip pending">built · not yet run with a key</span></td></tr>
-            <tr><td>Feedback store and review script</td><td><span class="chip pending">built · not yet live</span></td></tr>
-            <tr><td>Evaluation tool with regression gate</td><td><span class="chip pending">built · waiting for test set</span></td></tr>
+            <tr><td>AI check with rules fallback, retry on timeouts, time and token logging</td><td><span class="chip ok">live</span></td></tr>
+            <tr><td>Feedback store and review script</td><td><span class="chip ok">live · no real users yet</span></td></tr>
+            <tr><td>Evaluation tool with regression gate</td><td><span class="chip ok">run on 123 real messages</span></td></tr>
             <tr><td>Android call protection</td><td><span class="chip plan">designed</span></td></tr>
             <tr><td>WhatsApp "forward to Ruko"</td><td><span class="chip plan">planned</span></td></tr>
           </tbody>
@@ -221,7 +226,9 @@
     <section class="part">
       <h3>What still breaks</h3>
       <ul class="tight">
-        <li>New scam scripts that use none of the known phrases.</li>
+        <li>Danger hidden in an attachment, like a wedding "invitation" that is really an app file. The text alone looks harmless.</li>
+        <li>Fake "money credited" SMS that look identical to real ones. Only the bank app can confirm.</li>
+        <li>Short chat messages that only look wrong in context, such as a "boss" asking about company funds in Hinglish.</li>
         <li>Messages that are only an image or a voice note.</li>
         <li>iPhone does not allow call protection at all; those users get the web check only.</li>
         <li>Prevention depends on setup before the scam happens. Adoption, not detection, is the hardest problem.</li>
@@ -269,7 +276,7 @@
           <tbody>
             <tr><td>Colour maths, presets, link reader helpers</td><td><span class="chip ok">built · 23 tests passing</span></td></tr>
             <tr><td>Live camera try-on</td><td><span class="chip ok">built</span></td></tr>
-            <tr><td>AI link reader</td><td><span class="chip pending">built · needs API key</span></td></tr>
+            <tr><td>AI link reader</td><td><span class="chip ok">live</span></td></tr>
             <tr><td>Cloud try-on comparison (local only)</td><td><span class="chip pending">built · not yet compared</span></td></tr>
           </tbody>
         </table>
