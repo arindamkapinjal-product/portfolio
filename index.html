@@ -124,8 +124,8 @@
     <p class="lede">I build working AI prototypes and judge them the way an interviewer would: what was decided, how it is tested, and what still breaks. Two projects so far, both built end to end.</p>
     <div class="facts">
       <span>2 working prototypes</span>
-      <span>89.7% of real scam messages caught</span>
-      <span>39 automated tests passing</span>
+      <span>91.8% of real scam messages caught</span>
+      <span>40 automated tests passing</span>
       <span>₹0 running cost</span>
     </div>
   </header>
@@ -185,24 +185,51 @@
 
     <section class="part">
       <h3>How I know it works</h3>
-      <p class="note">Test set: 123 real, published messages (97 scams, 26 genuine) from fact-checkers, newspapers, police and bank advisories, each with its source. Nothing invented. The genuine set is small, so false-alarm figures will move as it grows.</p>
+      <p class="note">Real test set: 123 published messages (97 scams, 26 genuine) from fact-checkers, newspapers, police and bank advisories, each with its source. Nothing invented. The genuine set is small, so false-alarm figures will move as it grows. Small differences between runs can be normal AI variation.</p>
       <div class="scroll">
         <table>
-          <thead><tr><th>Measure</th><th>Target</th><th>Rules only</th><th>Rules + AI</th></tr></thead>
+          <thead><tr><th>Measure</th><th>Target</th><th>Rules only</th><th>Rules + AI</th><th>After iteration 1</th></tr></thead>
           <tbody>
-            <tr><td>Scams caught</td><td class="num">≥ 90%</td><td class="num">35.1%</td><td class="num"><b>89.7%</b> <span class="chip pending">just short</span></td></tr>
-            <tr><td>Scams caught, Hindi (30)</td><td class="num">gap ≤ 10 pts</td><td class="num">13.3%</td><td class="num"><b>96.7%</b> <span class="chip ok">gap closed</span></td></tr>
-            <tr><td>Scams caught, Hinglish (7)</td><td class="num">gap ≤ 10 pts</td><td class="num">14.3%</td><td class="num"><b>28.6%</b> <span class="chip pending">weak, tiny sample</span></td></tr>
-            <tr><td>False alarms on genuine messages</td><td class="num">≤ 5%</td><td class="num">7.7%</td><td class="num"><b>19.2%</b> <span class="chip pending">missed</span></td></tr>
-            <tr><td>Genuine messages told to STOP</td><td class="num">0%</td><td class="num">0%</td><td class="num"><b>0%</b> <span class="chip ok">met</span></td></tr>
-            <tr><td>Median time per check</td><td class="num">&lt; 3 s</td><td class="num">instant</td><td class="num"><b>0.9 s</b> (p95 1.7 s)</td></tr>
-            <tr><td>Cost per check</td><td class="num">₹0</td><td class="num">₹0</td><td class="num"><b>₹0</b> free tier · ~500 tokens in, 86 out</td></tr>
-            <tr><td>Prompt-injection messages not cleared</td><td class="num">100%</td><td colspan="2"><span class="chip pending">pending</span></td></tr>
-            <tr><td>Older users finishing a check unaided</td><td class="num">&lt; 30 s</td><td colspan="2"><span class="chip pending">pending</span></td></tr>
+            <tr><td>Scams caught</td><td class="num">≥ 90%</td><td class="num">35.1%</td><td class="num">89.7%</td><td class="num"><b>91.8%</b> <span class="chip ok">met</span></td></tr>
+            <tr><td>Hindi scams caught (30)</td><td class="num">gap ≤ 10 pts</td><td class="num">13.3%</td><td class="num">96.7%</td><td class="num"><b>96.7%</b> <span class="chip ok">gap closed</span></td></tr>
+            <tr><td>Hinglish scams caught (7)</td><td class="num">gap ≤ 10 pts</td><td class="num">14.3%</td><td class="num">28.6%</td><td class="num"><b>28.6%</b> <span class="chip pending">tiny sample</span></td></tr>
+            <tr><td>False alarms on genuine messages</td><td class="num">≤ 5%</td><td class="num">7.7%</td><td class="num">19.2%</td><td class="num"><b>15.4%</b> <span class="chip pending">not met</span></td></tr>
+            <tr><td>Genuine messages told to STOP</td><td class="num">0%</td><td class="num">0%</td><td class="num">0%</td><td class="num"><b>0%</b> <span class="chip ok">met</span></td></tr>
+            <tr><td>Median time per check</td><td class="num">&lt; 3 s</td><td class="num">instant</td><td class="num">0.9 s</td><td class="num"><b>0.85 s</b> (p95 1.2 s)</td></tr>
+            <tr><td>Cost per check</td><td class="num">₹0</td><td class="num">₹0</td><td class="num">₹0</td><td class="num"><b>₹0</b> free tier · ~500 tokens in, 85 out</td></tr>
+            <tr><td>Older users finishing a check unaided</td><td class="num">&lt; 30 s</td><td colspan="3"><span class="chip pending">pending: needs real people</span></td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note"><b>The trade-off I chose.</b> Adding the AI tripled the catch rate but raised false alarms, so my own regression gate flagged it. I kept it on purpose: every false alarm was a "Careful, check first" warning on a scary-sounding real bank or tax message, never a STOP. A missed scam can cost someone's savings; a cautious warning costs a phone call. Cutting false alarms is the next iteration.</p>
+      <p class="note"><b>The trade-off I chose.</b> Adding the AI nearly tripled the catch rate but raised false alarms, and my own regression gate flagged it. I kept it on purpose: every false alarm was a "Careful, check first" warning on a scary-sounding real bank or tax message, never a STOP. A missed scam can cost someone's savings; a cautious warning costs a phone call.</p>
+
+      <h3>Iteration 1: cutting false alarms</h3>
+      <p class="note">Most false alarms came from the rules, not the AI: one weak word like "pay" or "urgently" was enough for a warning. Every candidate fix had to pass the regression gate on both the real set and the synthetic set.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Candidate change</th><th>What the data showed</th><th>Decision</th></tr></thead>
+          <tbody>
+            <tr><td>Require two weak signals before warning</td><td>False alarms fell, but scams caught by the rules halved (35.1% → 18.6%)</td><td><span class="chip pending">rejected</span></td></tr>
+            <tr><td>Fix "unblocked" matching the "blocked" rule</td><td>Rules-only false alarms 7.7% → 3.8% on the real set, no scams lost</td><td><span class="chip ok">kept</span></td></tr>
+            <tr><td>Treat "use the official app or branch" as reassuring</td><td>Halved synthetic false alarms, but lost 3 real scams: real scammers say "official" too</td><td><span class="chip pending">rejected</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Synthetic stress test</h3>
+      <p class="note">To probe gaps the real data can't cover, an AI agent generated 110 messages, every one labelled synthetic: 60 genuine (20 each in English, Hindi and Hinglish, 32 deliberately scary-sounding), 25 Hinglish scams, 15 prompt-injection attacks and 10 subtle scams. These results are reported separately and never mixed with the real ones.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Synthetic measure</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Scams caught</td><td class="num"><b>98%</b> (49 of 50)</td></tr>
+            <tr><td>Hinglish scams caught</td><td class="num"><b>100%</b> (31)</td></tr>
+            <tr><td>Prompt-injection attacks not cleared</td><td class="num"><b>15 of 15</b> <span class="chip ok">met</span></td></tr>
+            <tr><td>Subtle scams caught</td><td class="num">9 of 10</td></tr>
+            <tr><td>False alarms on genuine messages</td><td class="num">13.3% (8 of 60), none told to STOP</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section class="part">
