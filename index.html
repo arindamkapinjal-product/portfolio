@@ -213,7 +213,7 @@
       <p class="note"><b>The trade-off I chose.</b> Adding the AI nearly tripled the catch rate but raised false alarms, and my own regression gate flagged it. I kept it on purpose: every false alarm was a "Careful, check first" warning on a scary-sounding real bank or tax message, never a STOP. A missed scam can cost someone's savings; a cautious warning costs a phone call.</p>
 
       <h3>Iteration 1: cutting false alarms</h3>
-      <p class="note">Most false alarms came from the rules, not the AI: one weak word like "pay" or "urgently" was enough for a warning. Every candidate fix had to pass the regression gate on both the real set and the synthetic set. Lesson: with only 26 genuine messages, a one-message change is noise. More real genuine messages will help more than more tweaking.</p>
+      <p class="note">Most false alarms came from the rules, not the AI: one weak word like "pay" or "urgently" was enough for a warning. Every candidate fix had to pass the regression gate on both the real set and the synthetic set. Lesson: identical code can vary by one message between runs, so with only 26 genuine messages a one-message change is noise. More real genuine messages will help more than more tweaking.</p>
       <div class="scroll">
         <table>
           <thead><tr><th>Candidate change</th><th>What the data showed</th><th>Decision</th></tr></thead>
@@ -221,7 +221,7 @@
             <tr><td>Require two weak signals before warning</td><td>False alarms fell, but scams caught by the rules halved (35.1% → 18.6%)</td><td><span class="chip pending">rejected</span></td></tr>
             <tr><td>Fix "unblocked" matching the "blocked" rule</td><td>Rules-only false alarms 7.7% → 3.8% on the real set, no scams lost</td><td><span class="chip ok">kept</span></td></tr>
             <tr><td>Treat "use the official app or branch" as reassuring</td><td>Halved synthetic false alarms, but lost 3 real scams: real scammers say "official" too</td><td><span class="chip pending">rejected</span></td></tr>
-            <tr><td>Tell the AI to judge official notices by what they ask you to do</td><td>No gain: one more false alarm and one fewer scam caught, within normal run-to-run variation</td><td><span class="chip pending">rejected</span></td></tr>
+            <tr><td>Tell the AI to judge official notices by what they ask you to do</td><td>Not tested yet: the hosting deploy was blocked, so the "after" run used the old code. That accident measured the noise instead: identical code varied by one message each way.</td><td><span class="chip plan">to retest</span></td></tr>
           </tbody>
         </table>
       </div>
